@@ -16,7 +16,8 @@ import {
   Tooltip,
   Input,
 } from "@material-tailwind/react";
-
+import axios from "axios";
+import { useEffect, useState } from "react";
 const TABLE_HEAD = ["Transaction", "Amount", "Date", "Status", "Account", ""];
 
 const TABLE_ROWS = [
@@ -73,6 +74,17 @@ const TABLE_ROWS = [
 ];
 
 export default function Table() {
+  const [products, setProducts] = useState([]);
+
+  const fetchData = async () => {
+    const res = await axios.get("http://localhost:3001/api/products");
+    setProducts(res.data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <div className="container mx-auto mt-24">
       <Card className="w-full h-full">
@@ -122,7 +134,7 @@ export default function Table() {
               </tr>
             </thead>
             <tbody>
-              {TABLE_ROWS.map(
+              {products?.map(
                 (
                   {
                     img,
